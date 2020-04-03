@@ -2,9 +2,9 @@ package ch.course223.helloworld.domainModels.auction;
 
 import ch.course223.helloworld.domainModels.article.Article;
 import ch.course223.helloworld.domainModels.bid.Bid;
+import ch.course223.helloworld.domainModels.user.User;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,12 +28,16 @@ public class Auction {
   @Column(name = "is_public", nullable = false)
   private boolean isPublic;
 
-  @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToMany(mappedBy = "id", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
   private Set<Bid> bids;
 
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "article_id")
   private Article article;
+
+  @ManyToOne(cascade = CascadeType.MERGE, fetch=FetchType.EAGER)
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  private User user;
 
   public Auction() {
   }
@@ -92,5 +96,13 @@ public class Auction {
 
   public void setArticle(Article article) {
     this.article = article;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
   }
 }

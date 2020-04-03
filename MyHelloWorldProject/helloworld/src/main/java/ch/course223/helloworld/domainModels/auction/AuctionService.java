@@ -13,4 +13,5 @@ public interface AuctionService {
   Auction updateById(int id, Auction auction);
 
   void deleteById(int id);
+
 }

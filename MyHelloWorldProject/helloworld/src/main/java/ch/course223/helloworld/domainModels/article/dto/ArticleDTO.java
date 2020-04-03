@@ -1,28 +1,18 @@
-package ch.course223.helloworld.domainModels.article;
+package ch.course223.helloworld.domainModels.article.dto;
 
-import ch.course223.helloworld.domainModels.auction.Auction;
+import ch.course223.helloworld.domainModels.article.Article;
 
-import javax.persistence.*;
+public class ArticleDTO {
 
-@Entity
-@Table(name = "article")
-public class Article {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
   private int id;
 
-  @Column
   private String name;
 
-  @Column
   private String description;
 
-  @Column
   private long value;
 
-  public Article() {
+  public ArticleDTO() {
   }
 
   public int getId() {
@@ -56,5 +46,4 @@ public class Article {
   public void setValue(long value) {
     this.value = value;
   }
-
 }

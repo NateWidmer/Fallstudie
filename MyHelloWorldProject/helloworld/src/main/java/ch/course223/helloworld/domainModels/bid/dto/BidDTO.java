@@ -1,32 +1,20 @@
-package ch.course223.helloworld.domainModels.bid;
+package ch.course223.helloworld.domainModels.bid.dto;
 
 import ch.course223.helloworld.domainModels.auction.Auction;
 import ch.course223.helloworld.domainModels.user.User;
 
-import javax.persistence.*;
+public class BidDTO {
 
-@Entity
-@Table(name = "bid")
-public class Bid {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
   private int id;
 
-  @Column(nullable = false)
   private long amount;
 
-  @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-  @JoinColumn(name = "auction_id", referencedColumnName = "id")
   private Auction auction;
 
-  @ManyToOne(cascade = CascadeType.MERGE, fetch=FetchType.EAGER)
-  @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
-  public Bid() {
-  }
+  // Standard empty constructor
+  public BidDTO() {}
 
   public int getId() {
     return id;

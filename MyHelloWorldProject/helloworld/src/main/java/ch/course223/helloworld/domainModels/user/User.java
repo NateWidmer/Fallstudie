@@ -33,10 +33,10 @@ public class User {
   )
   private Set<Role> roles;
 
-  @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToMany(mappedBy = "id", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
   private List<Auction> auctions;
 
-  @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
+  @OneToMany(mappedBy = "id", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
   private Set<Bid> bids;
 
   @Column(name = "account_expiration_date")

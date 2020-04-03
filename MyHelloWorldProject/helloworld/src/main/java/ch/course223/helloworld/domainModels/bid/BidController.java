@@ -1,7 +1,7 @@
 package ch.course223.helloworld.domainModels.bid;
 
-import ch.course223.helloworld.domainModels.auction.Auction;
-import ch.course223.helloworld.domainModels.auction.AuctionService;
+import ch.course223.helloworld.domainModels.bid.dto.BidDTO;
+import ch.course223.helloworld.domainModels.bid.dto.BidMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,29 +15,32 @@ public class BidController {
 
   private BidService bidService;
 
+  private BidMapper bidMapper;
+
   @Autowired
-  public BidController(BidService bidService) {
+  public BidController(BidService bidService, BidMapper bidMapper) {
     this.bidService = bidService;
+    this.bidMapper = bidMapper;
   }
 
   @PostMapping({"/", ""})
-  public ResponseEntity<Bid> create(@RequestBody Bid bid) {
-    return new ResponseEntity<>(bidService.create(bid), HttpStatus.CREATED);
+  public ResponseEntity<BidDTO> create(@RequestBody BidDTO bidDTO) {
+    return new ResponseEntity<>(bidMapper.toDTO(bidService.create(bidMapper.fromDTO(bidDTO))), HttpStatus.CREATED);
   }
 
   @GetMapping({"/", ""})
-  public ResponseEntity<List<Bid>> getAll() {
-    return new ResponseEntity<>(bidService.findAll(), HttpStatus.OK);
+  public ResponseEntity<List<BidDTO>> getAll() {
+    return new ResponseEntity<>(bidMapper.toDTOs(bidService.findAll()), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Bid> getById(@PathVariable int id) {
-    return new ResponseEntity<>(bidService.findById(id), HttpStatus.OK);
+  public ResponseEntity<BidDTO> getById(@PathVariable int id) {
+    return new ResponseEntity<>(bidMapper.toDTO(bidService.findById(id)), HttpStatus.OK);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Bid> updateById(@PathVariable int id, @RequestBody Bid bid) {
-    return new ResponseEntity<>(bidService.updateById(id, bid), HttpStatus.OK);
+  public ResponseEntity<BidDTO> updateById(@PathVariable int id, @RequestBody BidDTO bidDTO) {
+    return new ResponseEntity<>(bidMapper.toDTO(bidService.updateById(id, bidMapper.fromDTO(bidDTO))), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")

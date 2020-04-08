@@ -1,11 +1,12 @@
 package ch.course223.helloworld.domainModels.user;
 
-import ch.course223.helloworld.domainModels.article.Article;
-import ch.course223.helloworld.domainModels.auction.Auction;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -14,14 +15,19 @@ public class UserServiceImpl implements UserService {
 
   private UserRepository userRepository;
 
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
+
   @Autowired
-  public UserServiceImpl(UserRepository userRepository) {
+  public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
     this.userRepository = userRepository;
+    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
 
+  // The logic for creating a new user
   @Override
   public User create(User user) {
-    return this.userRepository.save(user);
+    user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    return userRepository.save(user);
   }
 
   @Override
@@ -30,13 +36,13 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User findById(int id) {
+  public User findById(String id) {
     return this.userRepository.findById(id).orElse(null);
   }
 
   @Override
-  public User updateById(int id, User user) {
-    if(userRepository.existsById(id)) {
+  public User updateById(String id, User user) {
+    if (userRepository.existsById(id)) {
       user.setId(id);
       userRepository.save(user);
 
@@ -47,21 +53,26 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void deleteById(int id) {
+  public void deleteById(String id) {
     userRepository.deleteById(id);
   }
 
   @Override
-  public List<Article> getBiddedOn(int id) {
-    User user = findById(id);
-    List<Article> articlesWithBids = new ArrayList<>();
-    if(user.getAuctions() != null) {
-      for(Auction auction : user.getAuctions()) {
-        if(!auction.getBids().isEmpty()) {
-          articlesWithBids.add(auction.getArticle());
-        }
-      }
+  public List<User> getBySalary(double min, double max) {
+    return userRepository.getBySalary(min, max);
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    try {
+      return new UserDetailsImpl(findByUsername(username));
+    } catch (NoSuchElementException e) {
+      throw new UsernameNotFoundException(e.getMessage());
     }
-    return articlesWithBids;
+  }
+
+  private User findByUsername(String username) {
+    return userRepository.findByUsernameAndLockedFalse(username);
   }
 }
+

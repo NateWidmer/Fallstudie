@@ -6,11 +6,13 @@ import java.util.Set;
 
 public class UserDTO {
 
-  private int id;
+  private String id;
 
   private String username;
 
   private String password;
+
+  private double salary;
 
   private Set<Role> roles;
 
@@ -18,13 +20,15 @@ public class UserDTO {
 
   private Boolean enabled;
 
+  // Standard empty constructor
   public UserDTO() {}
 
-  public int getId() {
+  // Standard getters and setters
+  public String getId() {
     return id;
   }
 
-  public UserDTO setId(int id) {
+  public UserDTO setId(String id) {
     this.id = id;
     return this;
   }
@@ -45,6 +49,14 @@ public class UserDTO {
   public UserDTO setPassword(String password) {
     this.password = password;
     return this;
+  }
+
+  public double getSalary() {
+    return salary;
+  }
+
+  public void setSalary(double salary) {
+    this.salary = salary;
   }
 
   public Set<Role> getRoles() {

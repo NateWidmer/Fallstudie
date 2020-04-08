@@ -1,6 +1,5 @@
 package ch.course223.helloworld.domainModels.user;
 
-import ch.course223.helloworld.domainModels.article.Article;
 import ch.course223.helloworld.domainModels.user.dto.UserDTO;
 import ch.course223.helloworld.domainModels.user.dto.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,22 +34,22 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<UserDTO> getById(@PathVariable int id) {
+  public ResponseEntity<UserDTO> getById(@PathVariable String id) {
     return new ResponseEntity<>(userMapper.toDTO(userService.findById(id)), HttpStatus.OK);
   }
 
-  // @GetMapping("/{id}/biddedOn")
-  // public ResponseEntity<List<Article>> getAllBiddedOn(@PathVariable int id) {
-  //  return new ResponseEntity<>(userService.getBiddedOn(id), HttpStatus.OK);
-  // }
+  @GetMapping("/sal/{min}/{max}")
+  public ResponseEntity<List<UserDTO>> getBySalaryMinMax(@PathVariable double min, @PathVariable double max) {
+    return new ResponseEntity<>(userMapper.toDTOs(userService.getBySalary(min, max)), HttpStatus.OK);
+  }
 
   @PutMapping("/{id}")
-  public ResponseEntity<UserDTO> updateById(@PathVariable int id, @RequestBody UserDTO userDTO) {
+  public ResponseEntity<UserDTO> updateById(@PathVariable String id, @RequestBody UserDTO userDTO) {
     return new ResponseEntity<>(userMapper.toDTO(userService.updateById(id, userMapper.fromDTO(userDTO))), HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteById(@PathVariable int id) {
+  public ResponseEntity<Void> deleteById(@PathVariable String id) {
     userService.deleteById(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
